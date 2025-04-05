@@ -122,49 +122,46 @@ team_colors = {
     'UTA': '#002B5C', 'WAS': '#002B5C', 'NOH': '#0C2340', 'NOP': '#0C2340'
 }
 
-def get_table_download_link(df, filename, text):
-    csv = df.to_csv(index=False)
-    b64 = base64.b64encode(csv.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">{text}</a>'
-    return href
+# def get_table_download_link(df, filename, text):
+#     csv = df.to_csv(index=False)
+#     b64 = base64.b64encode(csv.encode()).decode()
+#     href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">{text}</a>'
+#     return href
 
-uploaded_file = st.sidebar.file_uploader("Upload NBA data CSV", type="csv")
+# uploaded_file = st.sidebar.file_uploader("Upload NBA data CSV", type="csv")
 
 @st.cache_data
-def load_data(uploaded_file=None):
-    if uploaded_file is not None:
-        data = pd.read_csv(uploaded_file)
-    else:
-        try:
-            data = pd.read_csv("nba.csv")
-        except FileNotFoundError:
-            st.warning("Using sample data. Please upload actual NBA data for full functionality.")
-            data = pd.DataFrame({
-                'PLAYER': ['LeBron James', 'Stephen Curry', 'Kevin Durant', 'Giannis Antetokounmpo', 'Nikola Jokic',
-                           'Luka Doncic', 'Damian Lillard', 'Joel Embiid', 'Kawhi Leonard', 'James Harden'],
-                'TEAM': ['LAL', 'GSW', 'BKN', 'MIL', 'DEN', 'DAL', 'POR', 'PHI', 'LAC', 'BKN'],
-                'year': ['2023-24', '2023-24', '2023-24', '2023-24', '2023-24',
-                         '2023-24', '2023-24', '2023-24', '2023-24', '2023-24'],
-                'Season_type': ['Regular Season', 'Regular Season', 'Regular Season', 'Regular Season', 'Regular Season',
-                            'Regular Season', 'Regular Season', 'Regular Season', 'Regular Season', 'Regular Season'],
-                'GP': [60, 74, 58, 73, 79, 70, 68, 69, 52, 72],
-                'MIN': [2100, 2368, 2146, 2482, 2765, 2520, 2312, 2415, 1768, 2520],
-                'PTS': [1740, 2072, 1682, 2336, 2133, 2310, 1768, 2277, 1248, 1728],
-                'FGM': [648, 676, 588, 864, 832, 756, 544, 776, 464, 544],
-                'FGA': [1260, 1480, 1160, 1460, 1580, 1610, 1360, 1480, 928, 1300],
-                'FG3M': [156, 380, 168, 48, 88, 238, 272, 48, 104, 232],
-                'FG3A': [468, 940, 456, 168, 248, 680, 748, 144, 286, 640],
-                'FTM': [288, 340, 328, 560, 380, 560, 408, 676, 216, 408],
-                'FTA': [330, 368, 374, 750, 460, 656, 440, 770, 248, 456],
-                'OREB': [48, 36, 24, 205, 198, 70, 42, 138, 56, 44],
-                'DREB': [414, 325, 372, 708, 774, 520, 238, 660, 282, 412],
-                'REB': [462, 361, 396, 913, 972, 590, 280, 798, 338, 456],
-                'AST': [534, 518, 354, 450, 776, 588, 496, 370, 226, 684],
-                'STL': [78, 81, 64, 94, 110, 116, 74, 70, 82, 104],
-                'BLK': [54, 26, 72, 94, 82, 46, 28, 128, 44, 42],
-                'TOV': [228, 236, 186, 248, 304, 290, 198, 226, 158, 264],
-                'PF': [114, 168, 138, 192, 220, 174, 150, 240, 122, 184]
-            })
+def load_data():
+    try:
+        data = pd.read_csv("nba.csv")
+    except FileNotFoundError:
+        st.warning("Using sample data. Please upload actual NBA data for full functionality.")
+        data = pd.DataFrame({
+            'PLAYER': ['LeBron James', 'Stephen Curry', 'Kevin Durant', 'Giannis Antetokounmpo', 'Nikola Jokic',
+                       'Luka Doncic', 'Damian Lillard', 'Joel Embiid', 'Kawhi Leonard', 'James Harden'],
+            'TEAM': ['LAL', 'GSW', 'BKN', 'MIL', 'DEN', 'DAL', 'POR', 'PHI', 'LAC', 'BKN'],
+            'year': ['2023-24', '2023-24', '2023-24', '2023-24', '2023-24',
+                     '2023-24', '2023-24', '2023-24', '2023-24', '2023-24'],
+            'Season_type': ['Regular Season', 'Regular Season', 'Regular Season', 'Regular Season', 'Regular Season',
+                        'Regular Season', 'Regular Season', 'Regular Season', 'Regular Season', 'Regular Season'],
+            'GP': [60, 74, 58, 73, 79, 70, 68, 69, 52, 72],
+            'MIN': [2100, 2368, 2146, 2482, 2765, 2520, 2312, 2415, 1768, 2520],
+            'PTS': [1740, 2072, 1682, 2336, 2133, 2310, 1768, 2277, 1248, 1728],
+            'FGM': [648, 676, 588, 864, 832, 756, 544, 776, 464, 544],
+            'FGA': [1260, 1480, 1160, 1460, 1580, 1610, 1360, 1480, 928, 1300],
+            'FG3M': [156, 380, 168, 48, 88, 238, 272, 48, 104, 232],
+            'FG3A': [468, 940, 456, 168, 248, 680, 748, 144, 286, 640],
+            'FTM': [288, 340, 328, 560, 380, 560, 408, 676, 216, 408],
+            'FTA': [330, 368, 374, 750, 460, 656, 440, 770, 248, 456],
+            'OREB': [48, 36, 24, 205, 198, 70, 42, 138, 56, 44],
+            'DREB': [414, 325, 372, 708, 774, 520, 238, 660, 282, 412],
+            'REB': [462, 361, 396, 913, 972, 590, 280, 798, 338, 456],
+            'AST': [534, 518, 354, 450, 776, 588, 496, 370, 226, 684],
+            'STL': [78, 81, 64, 94, 110, 116, 74, 70, 82, 104],
+            'BLK': [54, 26, 72, 94, 82, 46, 28, 128, 44, 42],
+            'TOV': [228, 236, 186, 248, 304, 290, 198, 226, 158, 264],
+            'PF': [114, 168, 138, 192, 220, 174, 150, 240, 122, 184]
+        })
     
     if 'season_start_year' not in data.columns:
         data['season_start_year'] = data['year'].str[:4].astype(int)
@@ -179,29 +176,143 @@ def load_data(uploaded_file=None):
     
     return data, rs_df, playoffs_df, total_cols
 
-data, rs_df, playoffs_df, total_cols = load_data(uploaded_file)
+# Update this line to call load_data() without arguments
+data, rs_df, playoffs_df, total_cols = load_data()
 
 def create_per_min_stats(data, total_cols):
+    # First, ensure 'year' is in the right format
+    if 'season_start_year' in data.columns:
+        data['year'] = data.apply(lambda row: f"{row['season_start_year']}-{str(row['season_start_year']+1)[2:]}", axis=1)
+    
+    # Group by player and year to aggregate stats
     data_per_min = data.groupby(['PLAYER', 'year'])[total_cols].sum().reset_index()
     
-    for col in data_per_min.columns[2:]:
-        data_per_min[col] = data_per_min[col]/data_per_min['MIN']
+    # Filter out players with minimal minutes to avoid division issues
+    data_per_min = data_per_min[data_per_min['MIN'] >= 50]
     
-    data_per_min['FG%'] = data_per_min['FGM']/data_per_min['FGA']
-    data_per_min['3PT%'] = data_per_min['FG3M']/data_per_min['FG3A']
-    data_per_min['FT%'] = data_per_min['FTM']/data_per_min['FTA']
-    data_per_min['FG3A%'] = data_per_min['FG3A']/data_per_min['FGA']
-    data_per_min['PTS/FGA'] = data_per_min['PTS']/data_per_min['FGA']
-    data_per_min['FG3M/FGM'] = data_per_min['FG3M']/data_per_min['FGM']
-    data_per_min['FTA/FGA'] = data_per_min['FTA']/data_per_min['FGA']
-    data_per_min['TRU%'] = 0.5*data_per_min['PTS']/(data_per_min['FGA']+0.475*data_per_min['FTA'])
-    data_per_min['AST_TOV'] = data_per_min['AST']/data_per_min['TOV']
+    # Calculate per-minute stats
+    for col in total_cols:
+        if col != 'MIN':  # Don't normalize minutes by minutes
+            data_per_min[col] = data_per_min[col]/data_per_min['MIN']
     
-    data_per_min = data_per_min[data_per_min['MIN']>=50]
+    # Add shooting percentages
+    if all(col in total_cols for col in ['FGM', 'FGA']):
+        data_per_min['FG%'] = data_per_min['FGM']/data_per_min['FGA']
+    
+    if all(col in total_cols for col in ['FG3M', 'FG3A']):
+        data_per_min['3PT%'] = data_per_min['FG3M']/data_per_min['FG3A']
+    
+    if all(col in total_cols for col in ['FTM', 'FTA']):
+        data_per_min['FT%'] = data_per_min['FTM']/data_per_min['FTA']
+    
+    # Add other advanced metrics
+    if all(col in total_cols for col in ['FG3A', 'FGA']):
+        data_per_min['FG3A%'] = data_per_min['FG3A']/data_per_min['FGA']
+    
+    if all(col in total_cols for col in ['PTS', 'FGA']):
+        data_per_min['PTS/FGA'] = data_per_min['PTS']/data_per_min['FGA']
+    
+    if all(col in total_cols for col in ['FG3M', 'FGM']):
+        data_per_min['FG3M/FGM'] = data_per_min['FG3M']/data_per_min['FGM']
+    
+    if all(col in total_cols for col in ['FTA', 'FGA']):
+        data_per_min['FTA/FGA'] = data_per_min['FTA']/data_per_min['FGA']
+    
+    if all(col in total_cols for col in ['PTS', 'FGA', 'FTA']):
+        data_per_min['TRU%'] = 0.5*data_per_min['PTS']/(data_per_min['FGA']+0.475*data_per_min['FTA'])
+    
+    if all(col in total_cols for col in ['AST', 'TOV']):
+        data_per_min['AST_TOV'] = data_per_min['AST']/data_per_min['TOV'].replace(0, 0.001)  # Avoid division by zero
     
     return data_per_min
 
 data_per_min = create_per_min_stats(data, total_cols)
+
+def preprocess_nba_data(data):
+    """
+    Preprocesses NBA data to ensure consistent formatting and handle common issues.
+    
+    Parameters:
+    data (pandas.DataFrame): The raw NBA data
+    
+    Returns:
+    pandas.DataFrame: Cleaned and preprocessed data
+    """
+    # Create a copy to avoid modifying the original
+    df = data.copy()
+    
+    # Check for column names that need to be standardized
+    column_map = {
+        'PLAYER_NAME': 'PLAYER',
+        'PLAYER ID': 'PLAYER_ID',
+        'TEAM_ABBREVIATION': 'TEAM',
+        'GAMES PLAYED': 'GP',
+        'MINUTES': 'MIN',
+        'POINTS': 'PTS',
+        'FIELD_GOALS_MADE': 'FGM',
+        'FIELD_GOALS_ATTEMPTED': 'FGA',
+        'FIELD_GOAL_PERCENTAGE': 'FG_PCT',
+        'THREE_POINTS_MADE': 'FG3M',
+        'THREE_POINTS_ATTEMPTED': 'FG3A',
+        'THREE_POINT_PERCENTAGE': 'FG3_PCT',
+        'FREE_THROWS_MADE': 'FTM',
+        'FREE_THROWS_ATTEMPTED': 'FTA',
+        'FREE_THROW_PERCENTAGE': 'FT_PCT',
+        'OFFENSIVE_REBOUNDS': 'OREB',
+        'DEFENSIVE_REBOUNDS': 'DREB',
+        'REBOUNDS': 'REB',
+        'ASSISTS': 'AST',
+        'STEALS': 'STL',
+        'BLOCKS': 'BLK',
+        'TURNOVERS': 'TOV',
+        'PERSONAL_FOULS': 'PF',
+    }
+    
+    # Apply the column mapping for columns that exist
+    for old_col, new_col in column_map.items():
+        if old_col in df.columns and new_col not in df.columns:
+            df[new_col] = df[old_col]
+    
+    # Handle season format
+    if 'season_start_year' not in df.columns:
+        if 'year' in df.columns:
+            # Try to extract the season start year from the 'year' column
+            try:
+                df['season_start_year'] = df['year'].astype(str).str.split('-').str[0].astype(int)
+            except:
+                # If that fails, try to handle year in a different format
+                pass
+    
+    # Handle team abbreviations
+    if 'TEAM' in df.columns:
+        # Standardize team abbreviations
+        team_map = {
+            'NOP': 'NO',
+            'NOH': 'NO',
+            'BRK': 'BKN',
+            'PHO': 'PHX',
+            'CHH': 'CHA',
+            'UTH': 'UTA'
+        }
+        
+        df['TEAM'].replace(team_map, inplace=True)
+    
+    # Create a standard year column if needed
+    if 'year' not in df.columns and 'season_start_year' in df.columns:
+        df['year'] = df['season_start_year'].astype(str) + '-' + df['season_start_year'].add(1).astype(str).str[-2:]
+    
+    # Make sure Season_type is standardized
+    if 'Season_type' not in df.columns:
+        if 'SEASON_TYPE' in df.columns:
+            df['Season_type'] = df['SEASON_TYPE']
+        else:
+            # Default to Regular Season if not specified
+            df['Season_type'] = 'Regular Season'
+    
+    return df
+
+# Add this line after loading the data
+data = preprocess_nba_data(data)
 
 def create_team_season_stats(data, total_cols):
     team_stats = data.groupby(['TEAM', 'season_start_year'])[total_cols + ['GP']].sum().reset_index()
@@ -689,8 +800,11 @@ elif page == "Team Analysis":
     
     else:
         st.warning("No data available for the selected teams and season combination.")
+        
 
-elif page == "Player Comparisons":
+
+# Fixed Player Comparisons Section
+if page == "Player Comparisons":
     st.markdown('<h1 class="main-header">NBA Player Comparisons</h1>', unsafe_allow_html=True)
     
     st.markdown("""
@@ -700,154 +814,266 @@ elif page == "Player Comparisons":
     </div>
     """, unsafe_allow_html=True)
     
-    # Player selection
-    player_list = sorted(data['PLAYER'].unique())
+    # Ensure data_per_min has data before proceeding
+    if data_per_min.empty:
+        st.warning("No player statistics available. Recreating player statistics...")
+        data_per_min = create_per_min_stats(data, total_cols)
     
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        selected_players = st.multiselect(
-            "Select players to compare (2-5 recommended)",
-            player_list,
-            default=['LeBron James', 'Stephen Curry'] if 'LeBron James' in player_list and 'Stephen Curry' in player_list else player_list[:2]
-        )
-    
-    with col2:
-        # Season selection for player comparison
-        season_options = sorted(data['season_start_year'].unique())
-        selected_season = st.selectbox("Select season for comparison", season_options, index=len(season_options)-1)
-    
-    if len(selected_players) > 0:
-        # Get player data for selected season
-        selected_player_data = data_per_min[
-            (data_per_min['PLAYER'].isin(selected_players)) & 
-            (data_per_min['year'].str.startswith(str(selected_season)))
-        ]
-        
-        if not selected_player_data.empty:
-            st.markdown('<h2 class="sub-header">Player Radar Comparison</h2>', unsafe_allow_html=True)
-            
-            # Select metrics for radar chart
-            metrics = ['PTS', 'AST', 'REB', 'STL', 'BLK', 'FG%', '3PT%', 'FT%']
-            
-            # Create the radar chart
-            fig_radar = go.Figure()
-            
-            # Add each player as a trace
-            for player in selected_player_data['PLAYER'].unique():
-                player_data = selected_player_data[selected_player_data['PLAYER'] == player]
-                
-                # Get values and scale them (0-1 range for better visualization)
-                values = []
-                for metric in metrics:
-                    if metric in player_data.columns:
-                        val = player_data[metric].values[0]
-                        # For percentage metrics, they're already in a good range
-                        if metric in ['FG%', '3PT%', 'FT%']:
-                            values.append(val)
-                        else:
-                            # Min-max scaling compared to all players
-                            min_val = data_per_min[metric].min()
-                            max_val = data_per_min[metric].max()
-                            scaled_val = (val - min_val) / (max_val - min_val)
-                            values.append(scaled_val)
-                
-                # Add trace for this player
-                fig_radar.add_trace(go.Scatterpolar(
-                    r=values,
-                    theta=metrics,
-                    fill='toself',
-                    name=player
-                ))
-            
-            fig_radar.update_layout(
-                polar=dict(
-                    radialaxis=dict(
-                        visible=True,
-                        range=[0, 1]
-                    )
-                ),
-                title=f"Player Comparison - {selected_season}-{selected_season+1} Season",
-                showlegend=True,
-                height=600
-            )
-            
-            st.plotly_chart(fig_radar, use_container_width=True)
-            
-            st.markdown('<h2 class="sub-header">Detailed Player Statistics</h2>', unsafe_allow_html=True)
-            
-            display_cols = ['PLAYER', 'MIN', 'PTS', 'REB', 'AST', 'STL', 'BLK', 'FG%', '3PT%', 'FT%', 'TRU%', 'AST_TOV']
-            
-            display_df = selected_player_data[display_cols].copy()
-            
-            # Convert per-minute stats to per-game (assuming 36 minutes as full game)
-            for col in ['PTS', 'REB', 'AST', 'STL', 'BLK']:
-                display_df[col] = display_df[col] * 36
-            
-            # Format percentage columns
-            for col in ['FG%', '3PT%', 'FT%', 'TRU%']:
-                display_df[col] = display_df[col].map('{:.1%}'.format)
-            
-            # Format other numerical columns
-            for col in ['PTS', 'REB', 'AST', 'STL', 'BLK', 'AST_TOV']:
-                display_df[col] = display_df[col].map('{:.1f}'.format)
-            
-            # Rename columns for display
-            display_df.columns = ['Player', 'Minutes', 'PTS/36', 'REB/36', 'AST/36', 'STL/36', 'BLK/36', 
-                                'FG%', '3PT%', 'FT%', 'True Shooting %', 'AST/TO Ratio']
-            
-            st.dataframe(display_df.set_index('Player'), use_container_width=True)
-            
-            # Career trajectory visualization
-            if len(selected_players) == 1:
-                st.markdown('<h2 class="sub-header">Career Trajectory</h2>', unsafe_allow_html=True)
-                
-                player_name = selected_players[0]
-                player_career = data[data['PLAYER'] == player_name]
-                
-                if not player_career.empty:
-                    career_by_season = player_career.groupby('season_start_year')[total_cols + ['GP']].sum().reset_index()
-                    
-                    # Calculate per-game statistics
-                    per_game_cols = ['PTS', 'REB', 'AST', 'STL', 'BLK']
-                    for col in per_game_cols:
-                        career_by_season[f'{col}_per_game'] = career_by_season[col] / career_by_season['GP']
-                    
-                    # Create a line chart of career trajectory
-                    fig_career = go.Figure()
-                    
-                    for col in per_game_cols:
-                        fig_career.add_trace(go.Scatter(
-                            x=career_by_season['season_start_year'],
-                            y=career_by_season[f'{col}_per_game'],
-                            mode='lines+markers',
-                            name=f'{col} per Game'
-                        ))
-                    
-                    fig_career.update_layout(
-                        title=f"{player_name} Career Trajectory (2012-2024)",
-                        xaxis_title="Season",
-                        yaxis_title="Statistics per Game",
-                        legend=dict(x=0.01, y=0.99),
-                        hovermode="x unified",
-                        height=500
-                    )
-                    
-                    st.plotly_chart(fig_career, use_container_width=True)
-                    
-                    # Career highlights
-                    st.markdown(f"""
-                    <div class="chart-container">
-                        <h3>{player_name} Career Highlights (2012-2024)</h3>
-                        <p>The line chart above shows {player_name}'s statistical performance over time. 
-                        This visualization helps identify peak performance seasons and career trends.</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-        else:
-            st.warning(f"No data available for the selected players in the {selected_season}-{selected_season+1} season.")
+    # Check if we now have data
+    if data_per_min.empty:
+        st.error("Unable to generate player statistics. Please check the data format.")
     else:
-        st.info("Please select at least one player to compare.")
-
+        # Display available seasons
+        available_seasons = sorted(data['season_start_year'].unique())
+        if not available_seasons:
+            st.error("No seasons found in the data.")
+        else:
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                # Season selection first
+                selected_season = st.selectbox("Select season for comparison", available_seasons, 
+                                              index=len(available_seasons)-1)
+                
+                # Convert season to the format used in 'year' column (e.g., 2023 to "2023-24")
+                season_year_str = f"{selected_season}-{str(selected_season+1)[2:]}"
+                
+                # For robustness, also check alternative format if no data is found
+                alternative_season_format = f"{selected_season}-{selected_season+1}"
+                
+                # Display the season format for debugging
+                st.caption(f"Looking for data with season format: {season_year_str} or {alternative_season_format}")
+            
+            # First try with the primary format
+            season_data = data_per_min[data_per_min['year'] == season_year_str]
+            
+            # If no data found, try alternative format
+            if season_data.empty:
+                season_data = data_per_min[data_per_min['year'] == alternative_season_format]
+                if not season_data.empty:
+                    season_year_str = alternative_season_format
+            
+            # If still no data found, try creating on the fly for this season
+            if season_data.empty:
+                st.warning(f"No pre-calculated stats found for {season_year_str}. Creating them now...")
+                
+                # Filter the raw data for the selected season
+                season_raw_data = data[data['season_start_year'] == selected_season]
+                
+                if not season_raw_data.empty:
+                    # Create per-minute stats just for this season
+                    season_data = create_per_min_stats(season_raw_data, total_cols)
+                    st.success("Successfully created player statistics for the selected season.")
+                else:
+                    st.error(f"No raw data found for season {selected_season}.")
+            
+            # Get players who were active in the selected season
+            active_players = sorted(season_data['PLAYER'].unique()) if not season_data.empty else []
+            
+            with col2:
+                # Player selection with only active players from the selected season
+                if active_players:
+                    default_players = active_players[:2] if len(active_players) >= 2 else active_players
+                    selected_players = st.multiselect(
+                        "Select players to compare (2-5 recommended)",
+                        active_players,
+                        default=default_players
+                    )
+                    
+                    st.success(f"{len(active_players)} players found for {season_year_str}")
+                else:
+                    st.warning(f"No player data available for the {season_year_str} season.")
+                    selected_players = []
+            
+            # Add a show graphs button
+            show_graphs = False
+            if len(selected_players) > 0:
+                if st.button("Show Player Comparison Graphs", type="primary"):
+                    show_graphs = True
+            
+            if show_graphs and len(selected_players) > 0:
+                # Get player data for selected season
+                selected_player_data = season_data[season_data['PLAYER'].isin(selected_players)]
+                
+                if not selected_player_data.empty:
+                    with st.spinner("Generating player comparison visualizations..."):
+                        st.markdown('<h2 class="sub-header">Player Radar Comparison</h2>', unsafe_allow_html=True)
+                        
+                        # Determine available metrics for the radar chart
+                        available_base_metrics = ['PTS', 'AST', 'REB', 'STL', 'BLK']
+                        available_pct_metrics = ['FG%', '3PT%', 'FT%']
+                        
+                        radar_metrics = [m for m in available_base_metrics if m in selected_player_data.columns]
+                        radar_metrics += [m for m in available_pct_metrics if m in selected_player_data.columns]
+                        
+                        if not radar_metrics:
+                            st.warning("No metrics available for radar chart visualization.")
+                        else:
+                            # Create the radar chart
+                            fig_radar = go.Figure()
+                            
+                            # Get max values for each metric across all players for normalization
+                            max_values = {}
+                            for metric in radar_metrics:
+                                # For percentages, the max should be 1 (100%)
+                                if metric in available_pct_metrics:
+                                    max_values[metric] = 1
+                                else:
+                                    max_values[metric] = season_data[metric].max() * 1.1  # Add buffer
+                            
+                            # Add each player as a trace
+                            for player in selected_player_data['PLAYER'].unique():
+                                player_data = selected_player_data[selected_player_data['PLAYER'] == player]
+                                
+                                # Get values and normalize them (0-1 range)
+                                values = []
+                                for metric in radar_metrics:
+                                    if metric in player_data.columns and metric in max_values:
+                                        val = player_data[metric].values[0]
+                                        # Normalize value based on max for that metric
+                                        normalized_val = val / max_values[metric]
+                                        values.append(normalized_val)
+                                
+                                # Add trace for this player
+                                fig_radar.add_trace(go.Scatterpolar(
+                                    r=values,
+                                    theta=radar_metrics,
+                                    fill='toself',
+                                    name=player
+                                ))
+                            
+                            fig_radar.update_layout(
+                                polar=dict(
+                                    radialaxis=dict(
+                                        visible=True,
+                                        range=[0, 1]
+                                    )
+                                ),
+                                title=f"Player Comparison - {season_year_str} Season",
+                                showlegend=True,
+                                height=600
+                            )
+                            
+                            st.plotly_chart(fig_radar, use_container_width=True)
+                        
+                        # Display detailed player statistics table
+                        st.markdown('<h2 class="sub-header">Detailed Player Statistics</h2>', unsafe_allow_html=True)
+                        
+                        # Determine available columns for the table
+                        base_cols = ['PLAYER', 'MIN']
+                        stat_cols = [col for col in ['PTS', 'REB', 'AST', 'STL', 'BLK'] 
+                                    if col in selected_player_data.columns]
+                        pct_cols = [col for col in ['FG%', '3PT%', 'FT%', 'TRU%', 'AST_TOV'] 
+                                   if col in selected_player_data.columns]
+                        
+                        # Combine all available columns
+                        display_cols = base_cols + stat_cols + pct_cols
+                        
+                        # Create display dataframe
+                        display_df = selected_player_data[display_cols].copy()
+                        
+                        # Convert per-minute stats to per-36 minutes for better readability
+                        for col in stat_cols:
+                            display_df[col] = display_df[col] * 36
+                        
+                        # Format percentage columns
+                        for col in ['FG%', '3PT%', 'FT%', 'TRU%']:
+                            if col in display_df.columns:
+                                display_df[col] = display_df[col].apply(lambda x: f"{x:.1%}" if not pd.isna(x) else "N/A")
+                        
+                        # Format other numerical columns
+                        for col in stat_cols + ['AST_TOV']:
+                            if col in display_df.columns:
+                                display_df[col] = display_df[col].apply(lambda x: f"{x:.1f}" if not pd.isna(x) else "N/A")
+                        
+                        # Rename columns for display
+                        column_names = {
+                            'PLAYER': 'Player',
+                            'MIN': 'Minutes',
+                            'PTS': 'PTS/36',
+                            'REB': 'REB/36',
+                            'AST': 'AST/36',
+                            'STL': 'STL/36',
+                            'BLK': 'BLK/36',
+                            'FG%': 'FG%',
+                            '3PT%': '3PT%',
+                            'FT%': 'FT%',
+                            'TRU%': 'True Shooting %',
+                            'AST_TOV': 'AST/TO Ratio'
+                        }
+                        
+                        # Only rename columns that exist in the DataFrame
+                        rename_dict = {col: column_names[col] for col in display_df.columns if col in column_names}
+                        display_df = display_df.rename(columns=rename_dict)
+                        
+                        st.dataframe(display_df.set_index('Player'), use_container_width=True)
+                        
+                        # Career trajectory visualization - only for single player selection
+                        if len(selected_players) == 1:
+                            st.markdown('<h2 class="sub-header">Career Trajectory</h2>', unsafe_allow_html=True)
+                            
+                            player_name = selected_players[0]
+                            player_career = data[data['PLAYER'] == player_name]
+                            
+                            if not player_career.empty:
+                                # Check if we can create career stats
+                                if 'season_start_year' in player_career.columns and 'GP' in player_career.columns:
+                                    # Calculate per-game stats for each season
+                                    valid_stat_cols = [col for col in total_cols if col in player_career.columns]
+                                    
+                                    if valid_stat_cols:
+                                        career_by_season = player_career.groupby('season_start_year')[valid_stat_cols + ['GP']].sum().reset_index()
+                                        
+                                        # Calculate per-game statistics
+                                        career_stats = ['PTS', 'REB', 'AST', 'STL', 'BLK']
+                                        per_game_cols = [col for col in career_stats if col in valid_stat_cols]
+                                        
+                                        for col in per_game_cols:
+                                            career_by_season[f'{col}_per_game'] = career_by_season[col] / career_by_season['GP']
+                                        
+                                        # Create a line chart of career trajectory
+                                        fig_career = go.Figure()
+                                        
+                                        for col in per_game_cols:
+                                            fig_career.add_trace(go.Scatter(
+                                                x=career_by_season['season_start_year'],
+                                                y=career_by_season[f'{col}_per_game'],
+                                                mode='lines+markers',
+                                                name=f'{col} per Game'
+                                            ))
+                                        
+                                        fig_career.update_layout(
+                                            title=f"{player_name} Career Trajectory",
+                                            xaxis_title="Season",
+                                            yaxis_title="Statistics per Game",
+                                            legend=dict(x=0.01, y=0.99),
+                                            hovermode="x unified",
+                                            height=500
+                                        )
+                                        
+                                        st.plotly_chart(fig_career, use_container_width=True)
+                                        
+                                        # Career highlights
+                                        st.markdown(f"""
+                                        <div class="chart-container">
+                                            <h3>{player_name} Career Highlights</h3>
+                                            <p>The line chart above shows {player_name}'s statistical performance over time. 
+                                            This visualization helps identify peak performance seasons and career trends.</p>
+                                        </div>
+                                        """, unsafe_allow_html=True)
+                                    else:
+                                        st.warning("No statistical columns available for career trajectory visualization.")
+                                else:
+                                    st.warning("Required columns for career trajectory not found in data.")
+                            else:
+                                st.warning(f"No career data available for {player_name}.")
+                else:
+                    st.warning(f"No data available for the selected players in the {season_year_str} season.")
+            elif len(selected_players) > 0 and not show_graphs:
+                st.info("Click 'Show Player Comparison Graphs' to view the comparison visualizations.")
+            elif selected_players == [] and active_players:
+                st.info("Please select at least one player to compare.")
+                    
 elif page == "About the Project":
     st.markdown('<h1 class="main-header">About the NBA Analytics Project</h1>', unsafe_allow_html=True)
     
@@ -914,3 +1140,4 @@ elif page == "About the Project":
     <p>Email: shivamksi42@gmail.com</p>
     """, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
+    
